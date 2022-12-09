@@ -8,6 +8,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     restart: always
+
   api-database:
     build: ./api-database
     environment:
@@ -15,12 +16,30 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_HOST: ${API_DB_HOST}
       SECRET: ${SECRET}
-      OTHER_APP_TOKEN: ${OTHER_APP_TOKEN}
-      PORT: ${PORT}
+      OTHER_APP_TOKEN: ${API_DB_TOKEN}
+      PORT: ${API_DB_PORT}
     ports:
-      - "${PORT}:${PORT}"
+      - "${API_DB_PORT}:${API_DB_PORT}"
     depends_on:
       - db
     restart: on-failure
+
+  my-epitech-relay:
+    build: ./my-epitech-relay
+    environment:
+      API_DB_HOST: ${API_DB_HOST2}
+      HOST_NAME: ${RELAY_HOST}
+      API_DB_TOKEN: ${API_DB_TOKEN}
+      PORT: ${RELAY_PORT}
+    ports:
+      - "${RELAY_PORT}:${RELAY_PORT}"
+    depends_on:
+      - api-database
+    # networks:
+    #   - moulibot-network
+    restart: on-failure
+
+# networks:
+#   moulibot-network:
