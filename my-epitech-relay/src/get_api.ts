@@ -4,6 +4,7 @@ import express from "express";
 const app = express();
 
 export async function executeBDDApiRequest(endpoint:string, params:string, method:Method, body:object) {
+    console.log(process.env.API_DB_HOST + endpoint + params, body, process.env.API_DB_TOKEN)
     const res = await axios({
         method: method,
         url: process.env.API_DB_HOST + endpoint + params,

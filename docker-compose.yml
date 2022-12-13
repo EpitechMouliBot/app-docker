@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 services:
   db:
     build: ./database
@@ -7,7 +7,7 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    restart: always
+    restart: on-failure
 
   api-database:
     build: ./api-database
@@ -29,17 +29,32 @@ services:
   my-epitech-relay:
     build: ./my-epitech-relay
     environment:
-      API_DB_HOST: ${API_DB_HOST2}
+      API_DB_HOST: ${RELAY_API_DB_HOST}
       HOST_NAME: ${RELAY_HOST}
       API_DB_TOKEN: ${API_DB_TOKEN}
       PORT: ${RELAY_PORT}
+      BROWSER_BINARY_PATH: "/usr/bin/chromium"
     ports:
       - "${RELAY_PORT}:${RELAY_PORT}"
     depends_on:
+      - db
       - api-database
-    # networks:
-    #   - moulibot-network
     restart: on-failure
 
-# networks:
-#   moulibot-network:
+
+  discord-bots:
+    build: ./discord-bot
+    environment:
+      API_DB_HOST: ${RELAY_API_DB_HOST}
+      API_DB_TOKEN: ${API_DB_TOKEN}
+      DEV_DISCORD_BOT_TOKEN: ${DEV_DISCORD_BOT_TOKEN}
+      FINAL_DISCORD_BOT_TOKEN: ${FINAL_DISCORD_BOT_TOKEN}
+      WEBHOOK_URL: ${WEBHOOK_URL}
+      RELAY_HOST: ${RELAY_API}
+    # ports:
+      # - "${RELAY_PORT}:${RELAY_PORT}"
+    depends_on:
+      - db
+      - api-database
+      - my-epitech-relay
+    restart: on-failure

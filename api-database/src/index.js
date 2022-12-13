@@ -23,6 +23,3 @@ require('./routes/user/user_id.js')(glob.app, glob.con);
 glob.app.listen(glob.port, () => {
     console.log(`App listening at http://localhost:${glob.port}`);
 });
-
-
-console.log(glob.myenv.MYSQL_HOST, glob.myenv.MYSQL_USER, glob.myenv.MYSQL_PASSWORD, glob.myenv.MYSQL_DATABASE)

@@ -21,5 +21,6 @@ CREATE TABLE `user` (
 -- GRANT ALL ON moulibot.* to RELAY@'%' IDENTIFIED BY 'password-relay';
 -- GRANT ALL ON moulibot.* to APIDB@'%' IDENTIFIED BY 'password-api-db';
 
+SET GLOBAL host_cache_size=0;
 ALTER USER 'root' IDENTIFIED WITH mysql_native_password BY 'passwords';
 flush privileges;
