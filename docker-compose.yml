@@ -1,23 +1,24 @@
-version: "3.9"
+version: "3.8"
 services:
   db:
     build: ./database
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: 'epitechmoulibot'
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
     restart: on-failure
 
   api-database:
     build: ./api-database
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_HOST: ${API_DB_HOST}
-      SECRET: ${SECRET}
+      MYSQL_DATABASE: 'epitechmoulibot'
+      MYSQL_HOST: 'db'
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+      HOST_NAME: 'api-database'
+      SECRET: ${API_SECRET}
       OTHER_APP_TOKEN: ${API_DB_TOKEN}
       PORT: ${API_DB_PORT}
     ports:
@@ -29,11 +30,14 @@ services:
   my-epitech-relay:
     build: ./my-epitech-relay
     environment:
-      API_DB_HOST: ${RELAY_API_DB_HOST}
-      HOST_NAME: ${RELAY_HOST}
+      API_DB_HOST: ${API_DB_COMPLET}
+      HOST_NAME: 'my-epitech-relay'
       API_DB_TOKEN: ${API_DB_TOKEN}
       PORT: ${RELAY_PORT}
-      BROWSER_BINARY_PATH: "/usr/bin/chromium"
+      BROWSER_BINARY_PATH: ${RELAY_BROWSER_BINARY_PATH}
+      BROWSER_TYPE: ${RELAY_BROWSER_TYPE}
+      BROWSER_ARGS: '--no-sandbox'
+      NO_WINDOW: 1
     ports:
       - "${RELAY_PORT}:${RELAY_PORT}"
     depends_on:
@@ -41,18 +45,15 @@ services:
       - api-database
     restart: on-failure
 
-
-  discord-bots:
+  discord-bot:
     build: ./discord-bot
     environment:
-      API_DB_HOST: ${RELAY_API_DB_HOST}
+      API_DB_HOST: ${API_DB_COMPLET}
       API_DB_TOKEN: ${API_DB_TOKEN}
-      DEV_DISCORD_BOT_TOKEN: ${DEV_DISCORD_BOT_TOKEN}
-      FINAL_DISCORD_BOT_TOKEN: ${FINAL_DISCORD_BOT_TOKEN}
-      WEBHOOK_URL: ${WEBHOOK_URL}
+      DEV_DISCORD_BOT_TOKEN: ${DISCORD_BOT_DEV_TOKEN}
+      FINAL_DISCORD_BOT_TOKEN: ${DISCORD_BOT_FINAL_TOKEN}
+      WEBHOOK_URL: ${DISCORD_WEBHOOK_URL}
       RELAY_HOST: ${RELAY_API}
-    # ports:
-      # - "${RELAY_PORT}:${RELAY_PORT}"
     depends_on:
       - db
       - api-database
