@@ -45,17 +45,17 @@ services:
       - api-database
     restart: on-failure
 
-  discord-bot:
-    build: ./discord-bot
-    environment:
-      API_DB_HOST: ${API_DB_COMPLET}
-      API_DB_TOKEN: ${API_DB_TOKEN}
-      DEV_DISCORD_BOT_TOKEN: ${DISCORD_BOT_DEV_TOKEN}
-      FINAL_DISCORD_BOT_TOKEN: ${DISCORD_BOT_FINAL_TOKEN}
-      WEBHOOK_URL: ${DISCORD_WEBHOOK_URL}
-      RELAY_HOST: ${RELAY_API}
-    depends_on:
-      - db
-      - api-database
-      - my-epitech-relay
-    restart: on-failure
+  # discord-bot:
+  #   build: ./discord-bot
+  #   environment:
+  #     API_DB_HOST: ${API_DB_COMPLET}
+  #     API_DB_TOKEN: ${API_DB_TOKEN}
+  #     DEV_DISCORD_BOT_TOKEN: ${DISCORD_BOT_DEV_TOKEN}
+  #     FINAL_DISCORD_BOT_TOKEN: ${DISCORD_BOT_FINAL_TOKEN}
+  #     WEBHOOK_URL: ${DISCORD_WEBHOOK_URL}
+  #     RELAY_HOST: ${RELAY_API}
+  #   depends_on:
+  #     - db
+  #     - api-database
+  #     - my-epitech-relay
+  #   restart: on-failure
