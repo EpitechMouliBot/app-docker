@@ -1,7 +1,9 @@
 version: "3.8"
 services:
   db:
-    build: ./database
+    build: ./api-db/database
+    networks:
+      - epitechmoulibotNetwork
     environment:
       MYSQL_DATABASE: 'epitechmoulibot'
       MYSQL_USER: ${DATABASE_USER}
@@ -10,7 +12,9 @@ services:
     restart: on-failure
 
   api-database:
-    build: ./api-database
+    build: ./api-db/api
+    networks:
+      - epitechmoulibotNetwork
     environment:
       MYSQL_DATABASE: 'epitechmoulibot'
       MYSQL_HOST: 'db'
@@ -29,6 +33,8 @@ services:
 
   my-epitech-relay:
     build: ./my-epitech-relay
+    networks:
+      - epitechmoulibotNetwork
     environment:
       API_DB_HOST: ${API_DB_COMPLET}
       HOST_NAME: 'my-epitech-relay'
@@ -45,17 +51,23 @@ services:
       - api-database
     restart: on-failure
 
-  # discord-bot:
-  #   build: ./discord-bot
-  #   environment:
-  #     API_DB_HOST: ${API_DB_COMPLET}
-  #     API_DB_TOKEN: ${API_DB_TOKEN}
-  #     DEV_DISCORD_BOT_TOKEN: ${DISCORD_BOT_DEV_TOKEN}
-  #     FINAL_DISCORD_BOT_TOKEN: ${DISCORD_BOT_FINAL_TOKEN}
-  #     WEBHOOK_URL: ${DISCORD_WEBHOOK_URL}
-  #     RELAY_HOST: ${RELAY_API}
-  #   depends_on:
-  #     - db
-  #     - api-database
-  #     - my-epitech-relay
-  #   restart: on-failure
+  discord-bot:
+    build: ./discord-bot
+    networks:
+      - epitechmoulibotNetwork
+    environment:
+      API_DB_HOST: ${API_DB_COMPLET}
+      API_DB_TOKEN: ${API_DB_TOKEN}
+      DEV_DISCORD_BOT_TOKEN: ${DISCORD_BOT_DEV_TOKEN}
+      FINAL_DISCORD_BOT_TOKEN: ${DISCORD_BOT_FINAL_TOKEN}
+      WEBHOOK_URL: ${DISCORD_WEBHOOK_URL}
+      RELAY_HOST: ${RELAY_API}
+    depends_on:
+      - db
+      - api-database
+      - my-epitech-relay
+    restart: on-failure
+
+networks:
+  epitechmoulibotNetwork:
+    driver: bridge
