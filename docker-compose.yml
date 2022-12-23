@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   db:
-    build: ./api-db/database
+    build: ./database
     networks:
       - epitechmoulibotNetwork
     environment:
@@ -12,7 +12,7 @@ services:
     restart: on-failure
 
   api-database:
-    build: ./api-db/api
+    build: ./api-db
     networks:
       - epitechmoulibotNetwork
     environment:
