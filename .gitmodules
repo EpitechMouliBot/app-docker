@@ -1,0 +1,9 @@
+[submodule "api-db"]
+	path = api-db
+	url = https://github.com/EpitechMouliBot/api-db
+[submodule "discord-bot"]
+	path = discord-bot
+	url = https://github.com/EpitechMouliBot/discord-bot
+[submodule "my-epitech-relay"]
+	path = my-epitech-relay
+	url = https://github.com/EpitechMouliBot/my-epitech-relay
