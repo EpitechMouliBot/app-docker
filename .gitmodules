@@ -7,3 +7,6 @@
 [submodule "my-epitech-relay"]
 	path = my-epitech-relay
 	url = https://github.com/EpitechMouliBot/my-epitech-relay
+[submodule "database"]
+	path = database
+	url = https://github.com/EpitechMouliBot/database
