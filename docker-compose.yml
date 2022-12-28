@@ -1,7 +1,10 @@
 version: "3.8"
 services:
+
   db:
     build: ./database
+    volumes:
+      - epitechmoulibot-volume:/var/lib/mysql/data
     networks:
       - epitechmoulibotNetwork
     environment:
@@ -71,3 +74,6 @@ services:
 networks:
   epitechmoulibotNetwork:
     driver: bridge
+
+volumes:
+  epitechmoulibot-volume:
