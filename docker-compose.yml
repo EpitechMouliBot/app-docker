@@ -73,7 +73,7 @@ services:
 
 networks:
   epitechmoulibotNetwork:
-    driver: bridge
+    driver: host
 
 volumes:
   epitechmoulibot-volume:
