@@ -2,9 +2,9 @@ version: "3.8"
 services:
 
   db:
-    build: ./database
+    image: 'redboard/epitechmoulibot:database'
     volumes:
-      - epitechmoulibot-volume:/var/lib/mysql/data
+      - epitechmoulibot-volume:/var/lib/mysql
     networks:
       - epitechmoulibotNetwork
     environment:
@@ -15,7 +15,7 @@ services:
     restart: on-failure
 
   api-database:
-    build: ./api-db
+    image: 'redboard/epitechmoulibot:api-db'
     networks:
       - epitechmoulibotNetwork
     environment:
@@ -35,7 +35,7 @@ services:
     restart: on-failure
 
   my-epitech-relay:
-    build: ./my-epitech-relay
+    image: 'redboard/epitechmoulibot:my-epitech-relay'
     networks:
       - epitechmoulibotNetwork
     environment:
@@ -55,7 +55,7 @@ services:
     restart: on-failure
 
   discord-bot:
-    build: ./discord-bot
+    image: 'redboard/epitechmoulibot:discord-bot'
     networks:
       - epitechmoulibotNetwork
     environment:
@@ -73,7 +73,7 @@ services:
 
 networks:
   epitechmoulibotNetwork:
-    driver: host
+    driver: bridge
 
 volumes:
   epitechmoulibot-volume:
