@@ -3,6 +3,7 @@ services:
 
   db:
     image: 'redboard/epitechmoulibot:database'
+    container_name: 'epitechmoulibot:database'
     volumes:
       - epitechmoulibot-volume:/var/lib/mysql
     networks:
@@ -17,6 +18,7 @@ services:
 
   api-database:
     image: 'redboard/epitechmoulibot:api-db'
+    container_name: 'epitechmoulibot:api-db'
     networks:
       epitechmoulibotNetwork:
         ipv4_address: 12.7.0.3
@@ -36,14 +38,15 @@ services:
       - db
     restart: on-failure
 
-  my-epitech-relay:
+  relay:
     image: 'redboard/epitechmoulibot:my-epitech-relay'
+    container_name: 'epitechmoulibot:relay'
     networks:
       epitechmoulibotNetwork:
         ipv4_address: 12.7.0.4
     environment:
       API_DB_HOST: ${API_DB_COMPLET}
-      HOST_NAME: 'my-epitech-relay'
+      HOST_NAME: 'relay'
       API_DB_TOKEN: ${API_DB_TOKEN}
       PORT: ${RELAY_PORT}
       BROWSER_BINARY_PATH: ${RELAY_BROWSER_BINARY_PATH}
@@ -59,6 +62,7 @@ services:
 
   discord-bot:
     image: 'redboard/epitechmoulibot:discord-bot'
+    container_name: 'epitechmoulibot:discord-bot'
     networks:
       epitechmoulibotNetwork:
         ipv4_address: 12.7.0.5
@@ -72,7 +76,7 @@ services:
     depends_on:
       - db
       - api-database
-      - my-epitech-relay
+      - relay
     restart: on-failure
 
 networks:
