@@ -3,12 +3,12 @@ services:
 
   db:
     image: 'redboard/epitechmoulibot:database'
-    container_name: 'epitechmoulibot:database'
+    container_name: 'epitechmoulibot-database'
     volumes:
       - epitechmoulibot-volume:/var/lib/mysql
     networks:
       epitechmoulibotNetwork:
-        ipv4_address: 12.7.0.2
+        ipv4_address: 12.7.1.1
     environment:
       MYSQL_DATABASE: 'epitechmoulibot'
       MYSQL_USER: ${DATABASE_USER}
@@ -18,10 +18,10 @@ services:
 
   api-database:
     image: 'redboard/epitechmoulibot:api-db'
-    container_name: 'epitechmoulibot:api-db'
+    container_name: 'epitechmoulibot-api-db'
     networks:
       epitechmoulibotNetwork:
-        ipv4_address: 12.7.0.3
+        ipv4_address: 12.7.1.2
     environment:
       MYSQL_DATABASE: 'epitechmoulibot'
       MYSQL_HOST: 'db'
@@ -40,10 +40,10 @@ services:
 
   relay:
     image: 'redboard/epitechmoulibot:my-epitech-relay'
-    container_name: 'epitechmoulibot:relay'
+    container_name: 'epitechmoulibot-relay'
     networks:
       epitechmoulibotNetwork:
-        ipv4_address: 12.7.0.4
+        ipv4_address: 12.7.1.3
     environment:
       API_DB_HOST: ${API_DB_COMPLET}
       HOST_NAME: 'relay'
@@ -62,10 +62,10 @@ services:
 
   discord-bot:
     image: 'redboard/epitechmoulibot:discord-bot'
-    container_name: 'epitechmoulibot:discord-bot'
+    container_name: 'epitechmoulibot-discord-bot'
     networks:
       epitechmoulibotNetwork:
-        ipv4_address: 12.7.0.5
+        ipv4_address: 12.7.1.4
     environment:
       API_DB_HOST: ${API_DB_COMPLET}
       API_DB_TOKEN: ${API_DB_TOKEN}
