@@ -6,7 +6,8 @@ services:
     volumes:
       - epitechmoulibot-volume:/var/lib/mysql
     networks:
-      - epitechmoulibotNetwork
+      epitechmoulibotNetwork:
+        ipv4_address: 12.7.0.2
     environment:
       MYSQL_DATABASE: 'epitechmoulibot'
       MYSQL_USER: ${DATABASE_USER}
@@ -17,7 +18,8 @@ services:
   api-database:
     image: 'redboard/epitechmoulibot:api-db'
     networks:
-      - epitechmoulibotNetwork
+      epitechmoulibotNetwork:
+        ipv4_address: 12.7.0.3
     environment:
       MYSQL_DATABASE: 'epitechmoulibot'
       MYSQL_HOST: 'db'
@@ -37,7 +39,8 @@ services:
   my-epitech-relay:
     image: 'redboard/epitechmoulibot:my-epitech-relay'
     networks:
-      - epitechmoulibotNetwork
+      epitechmoulibotNetwork:
+        ipv4_address: 12.7.0.4
     environment:
       API_DB_HOST: ${API_DB_COMPLET}
       HOST_NAME: 'my-epitech-relay'
@@ -57,7 +60,8 @@ services:
   discord-bot:
     image: 'redboard/epitechmoulibot:discord-bot'
     networks:
-      - epitechmoulibotNetwork
+      epitechmoulibotNetwork:
+        ipv4_address: 12.7.0.5
     environment:
       API_DB_HOST: ${API_DB_COMPLET}
       API_DB_TOKEN: ${API_DB_TOKEN}
@@ -74,6 +78,10 @@ services:
 networks:
   epitechmoulibotNetwork:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 12.7.0.0/16
+          gateway: 12.7.0.1
 
 volumes:
   epitechmoulibot-volume:
