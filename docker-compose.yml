@@ -8,7 +8,7 @@ services:
       - epitechmoulibot-volume:/var/lib/mysql
     networks:
       epitechmoulibotNetwork:
-        ipv4_address: 12.7.1.1
+        ipv4_address: ${DATABASE_IPV4_ADDRESS}
     environment:
       MYSQL_DATABASE: 'epitechmoulibot'
       MYSQL_USER: ${DATABASE_USER}
@@ -21,7 +21,7 @@ services:
     container_name: 'epitechmoulibot-api-db'
     networks:
       epitechmoulibotNetwork:
-        ipv4_address: 12.7.1.2
+        ipv4_address: ${API_DB_IPV4_ADDRESS}
     environment:
       MYSQL_DATABASE: 'epitechmoulibot'
       MYSQL_HOST: 'db'
@@ -43,9 +43,9 @@ services:
     container_name: 'epitechmoulibot-relay'
     networks:
       epitechmoulibotNetwork:
-        ipv4_address: 12.7.1.3
+        ipv4_address: ${RELAY_IPV4_ADDRESS}
     environment:
-      API_DB_HOST: ${API_DB_COMPLET}
+      API_DB_HOST: 'http://api-database:${API_DB_PORT}'
       HOST_NAME: 'relay'
       API_DB_TOKEN: ${API_DB_TOKEN}
       PORT: ${RELAY_PORT}
@@ -65,14 +65,14 @@ services:
     container_name: 'epitechmoulibot-discord-bot'
     networks:
       epitechmoulibotNetwork:
-        ipv4_address: 12.7.1.4
+        ipv4_address: ${DISCORD_IPV4_ADDRESS}
     environment:
-      API_DB_HOST: ${API_DB_COMPLET}
+      API_DB_HOST: 'http://api-database:${API_DB_PORT}'
       API_DB_TOKEN: ${API_DB_TOKEN}
       DEV_DISCORD_BOT_TOKEN: ${DISCORD_BOT_DEV_TOKEN}
       FINAL_DISCORD_BOT_TOKEN: ${DISCORD_BOT_FINAL_TOKEN}
       WEBHOOK_URL: ${DISCORD_WEBHOOK_URL}
-      RELAY_HOST: ${RELAY_API}
+      RELAY_HOST: 'http://my-epitech-relay:${RELAY_PORT}'
     depends_on:
       - db
       - api-database
@@ -84,8 +84,8 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 12.7.0.0/16
-          gateway: 12.7.0.1
+        - subnet: ${SUBNET}
+          gateway: ${GATEWAY}
 
 volumes:
   epitechmoulibot-volume:
