@@ -5,7 +5,7 @@ services:
     image: 'redboard/epitechmoulibot:database'
     container_name: 'epitechmoulibot-database'
     volumes:
-      - epitechmoulibot-volume:/var/lib/mysql
+      - $PWD/database:/var/lib/mysql
     networks:
       epitechmoulibotNetwork:
         ipv4_address: ${DATABASE_IPV4_ADDRESS}
