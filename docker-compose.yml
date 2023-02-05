@@ -3,10 +3,12 @@ services:
 
   db:
     image: 'redboard/epitechmoulibot:database'
+    container_name: 'epitechmoulibot-database'
     volumes:
-      - epitechmoulibot-volume:/var/lib/mysql
+      - $PWD/database:/var/lib/mysql
     networks:
-      - epitechmoulibotNetwork
+      epitechmoulibotNetwork:
+        ipv4_address: ${DATABASE_IPV4_ADDRESS}
     environment:
       MYSQL_DATABASE: 'epitechmoulibot'
       MYSQL_USER: ${DATABASE_USER}
@@ -16,8 +18,10 @@ services:
 
   api-database:
     image: 'redboard/epitechmoulibot:api-db'
+    container_name: 'epitechmoulibot-api-db'
     networks:
-      - epitechmoulibotNetwork
+      epitechmoulibotNetwork:
+        ipv4_address: ${API_DB_IPV4_ADDRESS}
     environment:
       MYSQL_DATABASE: 'epitechmoulibot'
       MYSQL_HOST: 'db'
@@ -34,13 +38,15 @@ services:
       - db
     restart: on-failure
 
-  my-epitech-relay:
+  relay:
     image: 'redboard/epitechmoulibot:my-epitech-relay'
+    container_name: 'epitechmoulibot-relay'
     networks:
-      - epitechmoulibotNetwork
+      epitechmoulibotNetwork:
+        ipv4_address: ${RELAY_IPV4_ADDRESS}
     environment:
-      API_DB_HOST: ${API_DB_COMPLET}
-      HOST_NAME: 'my-epitech-relay'
+      API_DB_HOST: 'http://api-database:${API_DB_PORT}'
+      HOST_NAME: 'relay'
       API_DB_TOKEN: ${API_DB_TOKEN}
       PORT: ${RELAY_PORT}
       BROWSER_BINARY_PATH: ${RELAY_BROWSER_BINARY_PATH}
@@ -56,24 +62,30 @@ services:
 
   discord-bot:
     image: 'redboard/epitechmoulibot:discord-bot'
+    container_name: 'epitechmoulibot-discord-bot'
     networks:
-      - epitechmoulibotNetwork
+      epitechmoulibotNetwork:
+        ipv4_address: ${DISCORD_IPV4_ADDRESS}
     environment:
-      API_DB_HOST: ${API_DB_COMPLET}
+      API_DB_HOST: 'http://api-database:${API_DB_PORT}'
       API_DB_TOKEN: ${API_DB_TOKEN}
       DEV_DISCORD_BOT_TOKEN: ${DISCORD_BOT_DEV_TOKEN}
       FINAL_DISCORD_BOT_TOKEN: ${DISCORD_BOT_FINAL_TOKEN}
       WEBHOOK_URL: ${DISCORD_WEBHOOK_URL}
-      RELAY_HOST: ${RELAY_API}
+      RELAY_HOST: 'http://my-epitech-relay:${RELAY_PORT}'
     depends_on:
       - db
       - api-database
-      - my-epitech-relay
+      - relay
     restart: on-failure
 
 networks:
   epitechmoulibotNetwork:
     driver: bridge
+    ipam:
+      config:
+        - subnet: ${SUBNET}
+          gateway: ${GATEWAY}
 
 volumes:
   epitechmoulibot-volume:
